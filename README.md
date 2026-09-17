@@ -76,10 +76,12 @@ Ogni `git push` su `main` farà ripartire automaticamente il deploy.
 
 ## Come funziona l'interpretazione del PDF
 
-1. Il PDF viene letto **nel browser** con `pdf.js` (nessun upload a server esterni): il testo viene estratto pagina per pagina.
-2. Un parser euristico (`js/pdfParser.js`) cerca i nomi dei giorni della settimana (Lunedì, Martedì, …) e le etichette dei pasti (Colazione, Pranzo, Spuntino, Cena, …) per suddividere il testo in giorni e pasti.
-3. Il risultato viene mostrato in una schermata di **revisione modificabile**: puoi correggere il giorno, il tipo di pasto o il testo prima di salvare. Questo passaggio è volutamente sempre presente, perché ogni piano nutrizionale è formattato in modo diverso e un'interpretazione automatica al 100% non è affidabile.
-4. Solo dopo la conferma i dati vengono scritti su Supabase.
+Il PDF viene letto **nel browser** con `pdf.js` (nessun upload a server esterni). Il parser (`js/pdfParser.js`) riconosce due formati:
+
+- **Tabella settimanale** (il più comune tra i software per nutrizionisti, es. Progeo Medical): 7 colonne per i giorni, una riga per ogni pasto. Il parser lavora colonna per colonna, individuando i punti in cui lo spazio verticale tra due righe è più ampio del normale interlinea: quello è il segnale che si passa a un pasto diverso. Se il piano ha più settimane alternate nello stesso PDF, viene importata automaticamente la prima che il parser riesce a leggere; per usarne un'altra, carica di nuovo il PDF con una copia che contenga solo quella settimana, oppure correggi manualmente nella schermata di revisione.
+- **Sequenziale** (fallback): un giorno dopo l'altro nel testo, usato quando non viene riconosciuta nessuna tabella.
+
+In entrambi i casi il risultato viene mostrato in una schermata di **revisione modificabile** prima di essere salvato: puoi correggere il giorno, il tipo di pasto o il testo. Questo passaggio è volutamente sempre presente, perché ogni piano nutrizionale è formattato in modo diverso e un'interpretazione automatica al 100% non è affidabile.
 
 Quando la nutrizionista aggiorna il piano, basta ripetere il caricamento dalla sezione "Piano": il piano precedente viene disattivato (rimane comunque salvato nello storico) e il nuovo diventa quello attivo.
 
