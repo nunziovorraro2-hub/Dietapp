@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Percorso — la tua dieta, giorno per giorno</title>
+<meta name="description" content="Carica il piano della tua nutrizionista e segui l'avanzamento della tua dieta, giorno per giorno." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Karla:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ============ SCHERMATA AUTENTICAZIONE ============ -->
+  <section id="view-auth" class="auth-screen hidden">
+    <div class="auth-card">
+      <h1 class="wordmark" style="color: var(--accent-citrus);">Percorso</h1>
+      <p class="sub" id="auth-subtitle">Accedi per continuare il tuo piano alimentare.</p>
+
+      <form id="form-login">
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Accedi</button>
+        <p class="error-text hidden" id="login-error"></p>
+      </form>
+
+      <form id="form-signup" class="hidden">
+        <div class="field">
+          <label for="signup-name">Nome</label>
+          <input type="text" id="signup-name" autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="signup-email">Email</label>
+          <input type="email" id="signup-email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="signup-password">Password (min. 6 caratteri)</label>
+          <input type="password" id="signup-password" required minlength="6" autocomplete="new-password" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Crea account</button>
+        <p class="error-text hidden" id="signup-error"></p>
+        <p class="hint-text hidden" id="signup-success">Account creato — controlla la mail se richiesta la conferma, poi accedi.</p>
+      </form>
+
+      <p class="auth-switch">
+        <span id="switch-to-signup-wrap">Non hai un account? <button id="switch-to-signup">Registrati</button></span>
+        <span id="switch-to-login-wrap" class="hidden">Hai già un account? <button id="switch-to-login">Accedi</button></span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ APP AUTENTICATA ============ -->
+  <div id="view-app" class="hidden">
+    <header class="topbar">
+      <span class="wordmark">Percorso</span>
+      <nav>
+        <button data-route="week" class="active">Settimana</button>
+        <button data-route="progress">Avanzamento</button>
+        <button data-route="upload">Piano</button>
+      </nav>
+      <div class="user-menu">
+        <button id="btn-logout" class="btn btn-ghost btn-sm">Esci</button>
+      </div>
+    </header>
+
+    <div class="quote-strip">
+      <blockquote id="quote-text"></blockquote>
+    </div>
+
+    <!-- ---- Vista settimana ---- -->
+    <main id="route-week" class="view">
+      <div id="week-loading" class="parse-status"><span class="spinner"></span> Carico il tuo piano…</div>
+      <div id="week-empty" class="empty-state hidden">
+        <h2>Non hai ancora caricato una dieta</h2>
+        <p>Carica il PDF della tua nutrizionista per iniziare a seguire il piano.</p>
+        <br />
+        <button class="btn btn-primary" data-route="upload">Carica il piano</button>
+      </div>
+      <div id="week-content" class="hidden">
+        <div class="week-strip" id="week-strip"></div>
+        <div class="day-detail" id="day-detail"></div>
+      </div>
+    </main>
+
+    <!-- ---- Vista avanzamento ---- -->
+    <main id="route-progress" class="view hidden">
+      <div class="progress-grid">
+        <div class="stat-card">
+          <div class="big" id="stat-week-pct">—</div>
+          <div class="label">pasti completati questa settimana</div>
+        </div>
+        <div class="stat-card">
+          <div class="big" id="stat-streak">—</div>
+          <div class="label">giorni di fila con almeno un pasto segnato</div>
+        </div>
+      </div>
+      <div class="weight-panel">
+        <h3>Andamento peso</h3>
+        <canvas id="weightChart" width="800" height="180"></canvas>
+        <form class="weight-form" id="form-weight">
+          <input type="date" id="weight-date" required />
+          <input type="number" id="weight-value" step="0.1" placeholder="Peso in kg" required />
+          <button type="submit" class="btn btn-primary btn-sm">Aggiungi</button>
+        </form>
+      </div>
+    </main>
+
+    <!-- ---- Vista caricamento / revisione piano ---- -->
+    <main id="route-upload" class="view hidden">
+      <h2 style="margin-bottom:1rem;">Carica il piano alimentare</h2>
+      <div class="upload-zone" id="upload-zone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0L7 9m5-5l5 5M5 20h14"/></svg>
+        <h3>Trascina qui il PDF, o clicca per scegliere il file</h3>
+        <p class="hint-text">Il file resta sul tuo dispositivo: viene solo letto per interpretare il piano.</p>
+        <input type="file" id="pdf-input" accept="application/pdf" class="hidden" />
+      </div>
+      <div id="upload-status" class="parse-status hidden"><span class="spinner"></span> <span id="upload-status-text">Leggo il PDF…</span></div>
+
+      <div id="review-wrap" class="hidden" style="margin-top:1.6rem;">
+        <p class="hint-text" style="margin-bottom:1rem;">
+          Controlla e correggi l'interpretazione automatica prima di salvarla: i PDF non sono tutti uguali,
+          quindi qualche pasto potrebbe essere finito nel posto sbagliato.
+        </p>
+        <div id="review-days"></div>
+        <button class="btn btn-ghost btn-sm" id="add-day-btn" style="margin-bottom:1.4rem;">+ aggiungi giorno</button>
+        <div class="review-actions">
+          <button class="btn btn-primary" id="save-diet-btn">Salva piano</button>
+          <button class="btn btn-ghost" id="cancel-review-btn">Annulla</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Librerie esterne -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.0.379/pdf.worker.min.js";
+</script>
+
+<!-- App -->
+<script src="js/config.js"></script>
+<script src="js/supabaseClient.js"></script>
+<script src="js/quotes.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/pdfParser.js"></script>
+<script src="js/dietStore.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
