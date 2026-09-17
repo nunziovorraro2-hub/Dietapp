@@ -1,0 +1,380 @@
+/* ============================================================
+   PERCORSO — design system
+   Palette: notte di pino + carta pergamena + accenti agrumati
+   Tipografia: Fraunces (display) + Karla (UI/testo)
+   ============================================================ */
+
+:root {
+  --bg: #0f1b16;
+  --bg-elevated: #16241d;
+  --bg-elevated-2: #1c2e24;
+  --paper: #efeadc;
+  --paper-dim: #ddd6c2;
+  --ink: #f4f1e6;
+  --ink-soft: #b9c2b7;
+  --ink-faint: #7c887e;
+  --line: rgba(244, 241, 230, 0.14);
+  --accent-citrus: #f2b705;
+  --accent-coral: #f0653d;
+  --accent-herb: #86b45a;
+  --danger: #e0574a;
+
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Karla", "Segoe UI", sans-serif;
+
+  --radius-card: 18px;
+  --radius-pill: 999px;
+  --shadow-deep: 0 24px 60px -30px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(242, 183, 5, 0.07), transparent 40%),
+    radial-gradient(circle at 88% 82%, rgba(240, 101, 61, 0.08), transparent 45%);
+}
+
+h1, h2, h3, .display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+a { color: inherit; }
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  width: 100%;
+}
+input:focus, textarea:focus, select:focus, button:focus-visible {
+  outline: 2px solid var(--accent-citrus);
+  outline-offset: 2px;
+}
+
+.hidden { display: none !important; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--accent-coral); color: #1a0d08; }
+.btn-primary:hover { box-shadow: 0 8px 24px -8px rgba(240, 101, 61, 0.6); }
+.btn-ghost { background: transparent; color: var(--ink-soft); border: 1px solid var(--line); }
+.btn-ghost:hover { color: var(--ink); border-color: var(--ink-soft); }
+.btn-block { width: 100%; }
+.btn-sm { padding: 0.45rem 0.9rem; font-size: 0.85rem; }
+
+.error-text { color: var(--danger); font-size: 0.9rem; margin-top: 0.5rem; }
+.hint-text { color: var(--ink-faint); font-size: 0.85rem; }
+
+/* ------------------------------------------------------------
+   Layout applicativo
+   ------------------------------------------------------------ */
+#app { min-height: 100vh; display: flex; flex-direction: column; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.6rem;
+  border-bottom: 1px solid var(--line);
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--accent-citrus);
+}
+.topbar nav { display: flex; gap: 0.3rem; }
+.topbar nav button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.topbar nav button.active { background: var(--bg-elevated-2); color: var(--ink); }
+.user-menu { display: flex; align-items: center; gap: 0.8rem; }
+
+main.view { flex: 1; padding: 1.8rem 1.6rem 3rem; max-width: 920px; margin: 0 auto; width: 100%; }
+
+/* ------------------------------------------------------------
+   Frase motivazionale (hero ricorrente)
+   ------------------------------------------------------------ */
+.quote-strip {
+  padding: 0 1.6rem 1.2rem;
+  max-width: 920px;
+  margin: 0 auto;
+  width: 100%;
+}
+.quote-strip blockquote {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  color: var(--paper);
+  border-left: 3px solid var(--accent-citrus);
+  padding-left: 1rem;
+  animation: quoteIn 0.7s ease both;
+}
+@keyframes quoteIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ------------------------------------------------------------
+   Schermata autenticazione
+   ------------------------------------------------------------ */
+.auth-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+.auth-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 2.4rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow-deep);
+  animation: cardIn 0.5s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.auth-card h1 { font-size: 1.9rem; margin-bottom: 0.3rem; }
+.auth-card .sub { color: var(--ink-soft); margin-bottom: 1.6rem; font-size: 0.95rem; }
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 0.35rem; }
+.auth-switch { margin-top: 1.2rem; text-align: center; font-size: 0.9rem; color: var(--ink-soft); }
+.auth-switch button { color: var(--accent-citrus); font-weight: 700; text-decoration: underline; }
+
+/* ------------------------------------------------------------
+   Uploader / interpretazione PDF
+   ------------------------------------------------------------ */
+.upload-zone {
+  border: 2px dashed var(--line);
+  border-radius: var(--radius-card);
+  padding: 3rem 1.5rem;
+  text-align: center;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.upload-zone.drag-over { border-color: var(--accent-citrus); background: rgba(242,183,5,0.06); }
+.upload-zone svg { width: 46px; height: 46px; color: var(--accent-citrus); margin-bottom: 0.8rem; }
+.upload-zone h3 { font-size: 1.2rem; margin-bottom: 0.4rem; }
+
+.parse-status {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 0;
+  color: var(--ink-soft);
+}
+.spinner {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2.5px solid var(--line);
+  border-top-color: var(--accent-citrus);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.review-day {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  margin-bottom: 0.9rem;
+  overflow: hidden;
+}
+.review-day-head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem 1.1rem;
+}
+.review-day-head input.day-label-input { max-width: 220px; font-weight: 700; }
+.review-day-head select { max-width: 150px; }
+.review-meals { padding: 0 1.1rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.review-meal { display: flex; gap: 0.6rem; align-items: flex-start; }
+.review-meal input.meal-type-input { max-width: 190px; }
+.review-meal textarea { min-height: 64px; resize: vertical; }
+.review-meal .remove-meal { color: var(--ink-faint); padding: 0.6rem; }
+.review-meal .remove-meal:hover { color: var(--danger); }
+.add-meal-btn { align-self: flex-start; color: var(--accent-herb); font-weight: 700; font-size: 0.88rem; }
+.review-actions { display: flex; gap: 0.8rem; margin-top: 1.4rem; }
+
+/* ------------------------------------------------------------
+   Vista settimana — striscia dei giorni
+   ------------------------------------------------------------ */
+.week-strip {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.6rem;
+}
+.day-tab {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 14px 14px 4px 4px;
+  padding: 0.85rem 0.4rem 0.7rem;
+  text-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.day-tab .dname { display: block; font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 0.5rem; }
+.day-tab .dring {
+  width: 32px; height: 32px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; color: var(--ink);
+  background: conic-gradient(var(--accent-herb) calc(var(--pct, 0) * 1%), var(--line) 0);
+}
+.day-tab .dring::after {
+  content: "";
+  position: absolute;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+}
+.day-tab .dring span { position: relative; z-index: 1; }
+.day-tab:hover { transform: translateY(-2px); }
+.day-tab.active { border-color: var(--accent-citrus); background: var(--bg-elevated-2); }
+.day-tab.today::before {
+  content: "";
+  position: absolute; top: 6px; right: 6px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent-coral);
+}
+
+.day-detail {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 1.6rem;
+  animation: revealDay 0.45s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes revealDay {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.day-detail h2 { font-size: 1.5rem; margin-bottom: 1.2rem; }
+
+.meal-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--line);
+}
+.meal-row:first-of-type { border-top: none; }
+.meal-check {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-faint);
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+.meal-check svg { width: 14px; height: 14px; opacity: 0; transform: scale(0.5); transition: all 0.2s ease; }
+.meal-check.done { border-color: var(--accent-herb); background: var(--accent-herb); }
+.meal-check.done svg { opacity: 1; transform: scale(1); }
+.meal-check:active { transform: scale(0.9); }
+.meal-body { flex: 1; }
+.meal-body .mtype { font-weight: 700; margin-bottom: 0.2rem; }
+.meal-body .mtime { color: var(--ink-faint); font-size: 0.8rem; margin-left: 0.4rem; font-weight: 400; }
+.meal-body .mitems { color: var(--ink-soft); white-space: pre-line; font-size: 0.92rem; line-height: 1.5; }
+.meal-row.done .mtype, .meal-row.done .mitems { color: var(--ink-faint); text-decoration: line-through; text-decoration-color: rgba(185,194,183,0.4); }
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  color: var(--ink-soft);
+}
+.empty-state h2 { font-size: 1.6rem; margin-bottom: 0.6rem; color: var(--ink); }
+
+/* ------------------------------------------------------------
+   Progresso
+   ------------------------------------------------------------ */
+.progress-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+@media (max-width: 640px) { .progress-grid { grid-template-columns: 1fr; } }
+.stat-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 1.4rem;
+}
+.stat-card .big {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  color: var(--accent-citrus);
+}
+.stat-card .label { color: var(--ink-soft); font-size: 0.9rem; margin-top: 0.2rem; }
+
+.weight-panel {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 1.4rem;
+}
+.weight-panel h3 { margin-bottom: 1rem; }
+.weight-form { display: flex; gap: 0.6rem; margin-top: 1rem; }
+.weight-form input { flex: 1; }
+canvas#weightChart { width: 100%; height: 180px; display: block; }
+
+/* ------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------ */
+@media (max-width: 700px) {
+  .topbar { flex-wrap: wrap; gap: 0.6rem; }
+  .topbar nav { order: 3; width: 100%; overflow-x: auto; }
+  .week-strip { grid-template-columns: repeat(7, minmax(38px, 1fr)); gap: 0.35rem; }
+  .day-tab { padding: 0.6rem 0.2rem 0.5rem; }
+  .day-tab .dname { font-size: 0.65rem; }
+}
