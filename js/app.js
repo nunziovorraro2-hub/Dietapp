@@ -248,19 +248,28 @@ async function handlePdfFile(file) {
   $("upload-status-text").textContent = "Leggo il PDF…";
 
   try {
-    const text = await DietParser.extractTextFromPdf(file);
-    State.lastRawText = text;
+    const result = await DietParser.parseDietFile(file);
+    State.lastRawText = result.rawText;
     State.lastFilename = file.name;
 
     $("upload-status-text").textContent = "Interpreto il piano…";
     await new Promise((r) => setTimeout(r, 250)); // lascia respirare la UI
 
-    const days = DietParser.parseDietText(text);
-    State.parsedDays = days;
-    UI.renderReview(days);
+    State.parsedDays = result.days;
+    UI.renderReview(result.days);
 
     $("upload-status").classList.add("hidden");
     $("review-wrap").classList.remove("hidden");
+
+    if (result.format === "grid") {
+      const totalMeals = result.days.reduce((s, d) => s + d.meals.length, 0);
+      if (totalMeals === 0) {
+        alert(
+          "Ho letto il PDF ma non sono riuscito a riconoscere i pasti automaticamente. " +
+          "Puoi comunque compilare i giorni a mano qui sotto."
+        );
+      }
+    }
   } catch (err) {
     $("upload-status").classList.add("hidden");
     alert("Non sono riuscito a leggere questo PDF: " + err.message);
